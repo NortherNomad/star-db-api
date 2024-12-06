@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+
 import Spinner from '../spinner'
 import SwapiService from '../../services/swapi-service'
-import ErrorIndicator from "../error-indicator"
+import { ErrorIndicator } from "../errors"
+
 import './random-planet.css'
 
 export default class RandomPlanet extends Component {
@@ -21,7 +23,7 @@ export default class RandomPlanet extends Component {
         planet: {},
         loading: true,
         error: false
-    }
+    };
 
     componentDidMount() {
         const { updateInterval } = this.props
@@ -37,14 +39,14 @@ export default class RandomPlanet extends Component {
         this.setState({
             planet,
             loading: false
-        })
-    }
+        });
+    };
 
     onError = (err) => {
         this.setState({
             loading: false,
             error: true
-        })
+        });
     }
 
     updatePlanet = () => {
@@ -74,7 +76,7 @@ export default class RandomPlanet extends Component {
                 {spinner}
                 {content}
             </div>
-        )
+        );
     }
 }
 

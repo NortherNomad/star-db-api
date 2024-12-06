@@ -18,6 +18,7 @@ export {
 }
 
 export default class ItemDetails extends Component {
+
     swapiService = new SwapiService()
 
     state = {
@@ -31,15 +32,16 @@ export default class ItemDetails extends Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.state.itemId !== prevProps.itemId) {
+        if (this.props.itemId !== prevProps.itemId ||
+            this.props.getData !== prevProps.getData ||
+            this.props.getImageUrl !== prevProps.getImageUrl) {
             this.updateItem()
-            this.setState({loading: true})
+            this.setState({ loading: true })
         }
     }
 
     updateItem = () => {
-        const {itemId, getData, getImageUrl} = this.props
-        console.log(getData)
+        const { itemId, getData, getImageUrl } = this.props
         if (!itemId) {
             return
         }
@@ -55,37 +57,38 @@ export default class ItemDetails extends Component {
     }
 
     render() {
-        if (!this.state.item) {
-            return <span>Select a person from a list</span>
-        }
 
-        const {item, image, loading} = this.state
+        if (!this.state.item)
+            return <span>Select a person from a list</span>
+
+        const { item, image, loading } = this.state
 
         const spinner = loading ? <Spinner /> : null
 
-        const content = !loading ? <ItemDetailsView item={item} image={image} content={this.props.children} /> : null
+        const content = !loading ? <ItemDetailsView item={item} image={image} context={this.props.children}/> : null
 
         return (
             <div className="person-details card">
-                {spinner}
-                {content}
+                { spinner }
+                { content }
             </div>
         )
     }
 }
 
-const ItemDetailsView = ({item, image, context}) => {
+const ItemDetailsView = ({ item, image, context }) => {
+
     const { name } = item
 
     return (
         <React.Fragment>
             <img className="person-image" alt="person image"
-                src={ image } />
+                 src={ image } />
 
             <div className="card-body">
-                <h4>{name}</h4>
+                <h4>{ name }</h4>
                 <ul className="list-group list-group-flush">
-                    { 
+                    {
                         React.Children.map(context, (child) => {
                             return React.cloneElement(child, { item })
                         })
